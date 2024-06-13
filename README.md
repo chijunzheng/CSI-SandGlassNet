@@ -32,5 +32,4 @@ python main.py
 ### Dependency
 pip install torch wandb numpy scipy tensorboard
 
-### TODO
-[] hardcoded to indoor environment data pipeline, to generalize
+
