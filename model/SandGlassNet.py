@@ -4,28 +4,28 @@ import math
 from .transformer_block import TransformerBlock
 from collections import OrderedDict
 import json
-class PositionalEmbedding(nn.Module):
-    def __init__(self, num_positions, emb_size):
-        super(PositionalEmbedding, self).__init__()
-        self.register_buffer('pe', self.initialize_pe(num_positions, emb_size))
+# class PositionalEmbedding(nn.Module):
+#     def __init__(self, num_positions, emb_size):
+#         super(PositionalEmbedding, self).__init__()
+#         self.register_buffer('pe', self.initialize_pe(num_positions, emb_size))
 
-    def initialize_pe(self, num_positions, emb_size):
-        pe = torch.zeros(num_positions, emb_size)
-        position = torch.arange(0, num_positions, dtype=torch.float).unsqueeze(1)
-        div_term = torch.exp(torch.arange(0, emb_size, 2).float() * (-math.log(10000.0) / emb_size))
-        pe[:, 0::2] = torch.sin(position * div_term)
-        pe[:, 1::2] = torch.cos(position * div_term)
-        return pe.unsqueeze(0)
+#     def initialize_pe(self, num_positions, emb_size):
+#         pe = torch.zeros(num_positions, emb_size)
+#         position = torch.arange(0, num_positions, dtype=torch.float).unsqueeze(1)
+#         div_term = torch.exp(torch.arange(0, emb_size, 2).float() * (-math.log(10000.0) / emb_size))
+#         pe[:, 0::2] = torch.sin(position * div_term)
+#         pe[:, 1::2] = torch.cos(position * div_term)
+#         return pe.unsqueeze(0)
 
-    def forward(self, x):
-        bs, oc, h, w = x.shape
-        x = x.permute(0, 2, 3, 1)
-        x = x.reshape(bs, -1, oc) # put tokens in linear fashion
+#     def forward(self, x):
+#         bs, oc, h, w = x.shape
+#         x = x.permute(0, 2, 3, 1)
+#         x = x.reshape(bs, -1, oc) # put tokens in linear fashion
     
-        x = x + self.pe[:, :x.size(1), :]
+#         x = x + self.pe[:, :x.size(1), :]
 
-        x = x.reshape(bs, h, w, oc).permute(0, 3, 1, 2)
-        return x
+#         x = x.reshape(bs, h, w, oc).permute(0, 3, 1, 2)
+#         return x
 
 
 class DownSampleConvTX(nn.Module):
@@ -161,7 +161,7 @@ class SandGlassNet(nn.Module):
             dropout_rate = dropout_rate
         )
 
-        self.pos_embed = PositionalEmbedding(data_hw**2, data_channel)
+        #self.pos_embed = PositionalEmbedding(data_hw**2, data_channel)
         # !!! Important encoder and decoder is mirrored
         # therefore, decoder start with s2
         self.encoder = Encoder(data_hw, data_channel, cr, stage1_emb, stage2_emb, patch_size, n_tx, tx_nhead, tx_ffn_ratio, dropout_rate)
