@@ -19,28 +19,28 @@ class FeedForwardNetwork(nn.Module):
                     self.do_up(F.relu(self.up(x)))
                 ))
 
-class TransformerBlock(nn.Module):
-    def __init__(self, emb_dim, num_heads, expansion_ratio, dropout_rate=0.1):
-        super(TransformerBlock, self).__init__()
-        self.mha = nn.MultiheadAttention(embed_dim=emb_dim, num_heads=num_heads, dropout=dropout_rate)
-        self.ffn = FeedForwardNetwork(emb_dim, expansion_ratio, dropout_rate)
+# class TransformerBlock(nn.Module):
+#     def __init__(self, emb_dim, num_heads, expansion_ratio, dropout_rate=0.1):
+#         super(TransformerBlock, self).__init__()
+#         self.mha = nn.MultiheadAttention(embed_dim=emb_dim, num_heads=num_heads, dropout=dropout_rate)
+#         self.ffn = FeedForwardNetwork(emb_dim, expansion_ratio, dropout_rate)
 
-        self.ln_mha = nn.LayerNorm(emb_dim)
-        self.ln_ffn = nn.LayerNorm(emb_dim)
+#         self.ln_mha = nn.LayerNorm(emb_dim)
+#         self.ln_ffn = nn.LayerNorm(emb_dim)
 
-    def forward(self, x, mask=None):
-        # we use pre-LN transformer layer
-        # see paper: On Layer Normalization in the Transformer Architecture
-        residual = x
-        x_norm = self.ln_mha(x)
-        attn_output, _ = self.mha(x_norm, x_norm, x_norm)
-        out1 = residual + attn_output
+#     def forward(self, x, mask=None):
+#         # we use pre-LN transformer layer
+#         # see paper: On Layer Normalization in the Transformer Architecture
+#         residual = x
+#         x_norm = self.ln_mha(x)
+#         attn_output, _ = self.mha(x_norm, x_norm, x_norm)
+#         out1 = residual + attn_output
 
-        residual = out1
-        ffn_output = self.ffn(self.ln_mha(out1))
-        out2 = residual + ffn_output
+#         residual = out1
+#         ffn_output = self.ffn(self.ln_mha(out1))
+#         out2 = residual + ffn_output
 
-        return out2
+#         return out2
 
 # # Example usage:
 # emb_dim = 512

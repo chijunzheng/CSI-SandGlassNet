@@ -12,7 +12,7 @@ from utils.utils import calculate_nmse_and_rho, print_divider
 from utils.meter import AverageMeter
 
 
-DEFAULT_DATADIR="/data1/dataset/cost2100/"
+DEFAULT_DATADIR="/content/drive/MyDrive/2.Learning/Masters_Thesis/COST2100"
 DEFAULT_RUNDIR="./runs"
 DEFAULT_WANDB_PROJ="dl-csi"
 DEFAULT_BS = 200

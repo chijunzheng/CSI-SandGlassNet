@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import math
-from .transformer_block import TransformerBlock
+#from .transformer_block import TransformerBlock
 from collections import OrderedDict
 import json
 # class PositionalEmbedding(nn.Module):
@@ -33,10 +33,10 @@ class DownSampleConvTX(nn.Module):
         super(DownSampleConvTX, self).__init__()
         self.down_conv = nn.Conv2d(emb_in, emb_out, kernel_size=(patch_size, patch_size), stride=patch_size)
 
-        txblk=[]
-        for _ in range(n_tx):
-            txblk.append(TransformerBlock(emb_dim=emb_out, num_heads=tx_nhead, expansion_ratio=tx_ffn_ratio, dropout_rate=dropout_rate))
-        self.txblk = nn.Sequential(*txblk)
+        # txblk=[]
+        # for _ in range(n_tx):
+        #     txblk.append(TransformerBlock(emb_dim=emb_out, num_heads=tx_nhead, expansion_ratio=tx_ffn_ratio, dropout_rate=dropout_rate))
+        # self.txblk = nn.Sequential(*txblk)
 
     def forward(self, x):
         # input and output of this loop is standardized as spatial tensor
@@ -45,7 +45,7 @@ class DownSampleConvTX(nn.Module):
         bs, oc, h, w = x.shape
         x = x.permute(0, 2, 3, 1).reshape(bs, -1, oc) # layout as a series of tokens
     
-        x = self.txblk(x)
+        #x = self.txblk(x)
 
         x = x.reshape(bs, h, w, oc).permute(0, 3, 1, 2) # layout as spatial tensor
         return x
@@ -87,10 +87,10 @@ class UpSampleConvTX(nn.Module):
     def __init__(self, emb_in, emb_out, patch_size, tx_nhead, tx_ffn_ratio, n_tx, dropout_rate):
         super(UpSampleConvTX, self).__init__()
 
-        txblk=[]
-        for _ in range(n_tx):
-            txblk.append(TransformerBlock(emb_dim=emb_in, num_heads=tx_nhead, expansion_ratio=tx_ffn_ratio, dropout_rate=dropout_rate))
-        self.txblk = nn.Sequential(*txblk)
+        #txblk=[]
+        #for _ in range(n_tx):
+            #txblk.append(TransformerBlock(emb_dim=emb_in, num_heads=tx_nhead, expansion_ratio=tx_ffn_ratio, dropout_rate=dropout_rate))
+        #self.txblk = nn.Sequential(*txblk)
 
         self.up_conv = nn.ConvTranspose2d(emb_in, emb_out, kernel_size=patch_size, stride=patch_size)
 
@@ -99,7 +99,7 @@ class UpSampleConvTX(nn.Module):
         bs, oc, h, w = x.shape
         x = x.permute(0, 2, 3, 1).reshape(bs, -1, oc) # layout as a series of tokens
     
-        x = self.txblk(x)
+        #x = self.txblk(x)
 
         x = x.reshape(bs, h, w, oc).permute(0, 3, 1, 2) # layout as spatial tensor
 
@@ -170,7 +170,7 @@ class SandGlassNet(nn.Module):
         print(f"SandGlassNet Params:\n{json.dumps(model_arch, indent=True)}")
 
     def forward(self, x):
-        x = self.pos_embed(x)
+        #x = self.pos_embed(x)
 
         codeword = self.encoder(x)
         reconstructed_output = self.decoder(codeword)
