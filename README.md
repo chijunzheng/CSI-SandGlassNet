@@ -19,7 +19,7 @@ options:
 ```
 
 ### Run
-Following reproduces CSINet.
+Following reproduces SandglassNet.
 ```
 python main.py
 ```
